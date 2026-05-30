@@ -1,11 +1,14 @@
 # 🖼️ Batch AI Background Remover
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/alfitranurr/Remove-Background-Apps/blob/main/Remove_Background_Apps.ipynb)
+[![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/alfitranurr/remove-background-app)
 [![Python Version](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.12-blue)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=flat&logo=PyTorch&logoColor=white)](https://pytorch.org/)
 [![Gradio](https://img.shields.io/badge/Gradio-orange?logo=gradio&logoColor=white)](https://gradio.app/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/alfitranurr/Remove-Background-Apps)
+
+📍 **Live Demo Website**: [AI Background Remover on Hugging Face](https://huggingface.co/spaces/alfitranurr/remove-background-app)
 
 **Batch AI Background Remover** adalah sebuah proyek berbasis Python yang dirancang untuk menghapus latar belakang (background) gambar secara otomatis, massal (batch processing), dan presisi tinggi. Aplikasi ini memanfaatkan pustaka deep learning **`transparent-background`** yang didukung oleh model segmentasi mutakhir (**InSPyReNet**) berbasis **PyTorch**. 
 
@@ -254,6 +257,7 @@ Proyek ini dikembangkan dan dirawat dengan penuh dedikasi oleh:
 * **Email**: [alfitranurr@gmail.com](mailto:alfitranurr@gmail.com)
 * **GitHub**: [@alfitranurr](https://github.com/alfitranurr)
 * **Repositori Proyek**: [Remove-Background-Apps](https://github.com/alfitranurr/Remove-Background-Apps)
+* **Live Demo Website**: [AI Background Remover di Hugging Face](https://huggingface.co/spaces/alfitranurr/remove-background-app)
 
 Jika Anda menyukai proyek ini, berikan kontribusi Anda dengan mengirimkan *Pull Request* atau ajukan saran di halaman repositori GitHub!
 
