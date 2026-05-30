@@ -1,32 +1,38 @@
-# 🖼️ Remove Background Apps
+# 🖼️ Batch AI Background Remover
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/alfitranurr/Remove-Background-Apps/blob/main/Remove_Background_Apps.ipynb)
 [![Python Version](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.12-blue)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=flat&logo=PyTorch&logoColor=white)](https://pytorch.org/)
+[![Gradio](https://img.shields.io/badge/Gradio-orange?logo=gradio&logoColor=white)](https://gradio.app/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/alfitranurr/Remove-Background-Apps)
 
-**Remove Background Apps** adalah sebuah aplikasi berbasis Jupyter Notebook/Python yang dirancang untuk menghapus latar belakang (background) gambar secara otomatis dan massal (batch processing) dengan akurasi tinggi. Aplikasi ini memanfaatkan pustaka deep learning **`transparent-background`** yang didukung oleh model segmentasi mutakhir (InSPyReNet) berbasis **PyTorch**. Proyek ini dioptimalkan baik untuk berjalan secara lokal maupun di lingkungan cloud seperti **Google Colab** dengan dukungan akselerasi GPU (CUDA).
+**Batch AI Background Remover** adalah sebuah proyek berbasis Python yang dirancang untuk menghapus latar belakang (background) gambar secara otomatis, massal (batch processing), dan presisi tinggi. Aplikasi ini memanfaatkan pustaka deep learning **`transparent-background`** yang didukung oleh model segmentasi mutakhir (**InSPyReNet**) berbasis **PyTorch**. 
+
+Proyek ini hadir dengan dua pilihan penggunaan: **Jupyter Notebook** (sangat cocok untuk komputasi awan seperti Google Colab) dan **Aplikasi Web Interaktif** menggunakan **Gradio** yang dapat dijalankan secara lokal maupun dideploy gratis 100% di **Hugging Face Spaces**.
 
 ---
 
 ## 📌 Daftar Isi
-- [🖼️ Remove Background Apps](#️-remove-background-apps)
+- [🖼️ Batch AI Background Remover](#️-batch-ai-background-remover)
   - [📌 Daftar Isi](#-daftar-isi)
   - [📖 Pengenalan Project](#-pengenalan-project)
-    - [Mengapa Memilih Proyek Ini?](#mengapa-memilih-proyek-ini)
-    - [Teknologi yang Digunakan](#teknologi-yang-digunakan)
+  - [🌟 Fitur Utama](#-fitur-utama)
   - [🏗️ Arsitektur Proyek](#️-arsitektur-proyek)
     - [Diagram Arsitektur Sistem](#diagram-arsitektur-sistem)
-    - [Spesifikasi Model](#spesifikasi-model)
+    - [Spesifikasi Model & Pipeline](#spesifikasi-model--pipeline)
   - [🔄 Workflow (Alur Kerja)](#-workflow-alur-kerja)
+    - [A. Alur Kerja Notebook (Lokal/Colab)](#a-alur-kerja-notebook-lokalcolab)
+    - [B. Alur Kerja Web UI (Gradio)](#b-alur-kerja-web-ui-gradio)
   - [📁 Struktur Direktori](#-struktur-direktori)
   - [🚀 Instalasi & Penggunaan](#-instalasi--penggunaan)
-    - [A. Berjalan di Google Colab (Rekomendasi / Mudah)](#a-berjalan-di-google-colab-rekomendasi--mudah)
-    - [B. Berjalan di Komputer Lokal (Local Setup)](#b-berjalan-di-komputer-lokal-local-setup)
+    - [A. Berjalan di Google Colab (Mudah & Cepat)](#a-berjalan-di-google-colab-mudah--cepat)
+    - [B. Berjalan secara Lokal (Python CLI / Notebook)](#b-berjalan-secara-lokal-python-cli--notebook)
       - [1. Prasyarat Sistem](#1-prasyarat-sistem)
       - [2. Langkah Setup](#2-langkah-setup)
-      - [3. Menjalankan Kode](#3-menjalankan-kode)
+      - [3. Eksekusi Script CLI](#3-eksekusi-script-cli)
+    - [C. Menjalankan Website Secara Lokal (Gradio Web UI)](#c-menjalankan-website-secara-lokal-gradio-web-ui)
+    - [D. Mendeploy Website ke Cloud Secara Gratis (Hugging Face Spaces)](#d-mendeploy-website-ke-cloud-secara-gratis-hugging-face-spaces)
   - [📸 Contoh Perbandingan (Sebelum \& Sesudah)](#-contoh-perbandingan-sebelum--sesudah)
   - [👤 Developer Profile](#-developer-profile)
   - [📄 Lisensi](#-lisensi)
@@ -35,122 +41,133 @@
 
 ## 📖 Pengenalan Project
 
-Penghapusan latar belakang gambar merupakan kebutuhan penting di berbagai bidang, mulai dari desain grafis, e-commerce, hingga penyiapan dataset untuk model Machine Learning. Melakukan pemotongan background secara manual membutuhkan waktu yang lama dan keahlian khusus. 
+Penghapusan latar belakang gambar adalah kebutuhan krusial di berbagai industri seperti *e-commerce*, pemasaran digital, desain grafis, hingga penyiapan dataset untuk Machine Learning. Proses seleksi manual (masking) sangat melelahkan dan memakan waktu lama.
 
-Proyek **Remove Background Apps** hadir untuk menyelesaikan masalah tersebut dengan menyediakan sistem pemrosesan otomatis berbasis AI. Cukup dengan menaruh gambar di folder input, aplikasi akan menghasilkan gambar berformat PNG transparan (RGBA) secara instan tanpa mengurangi resolusi asli gambar tersebut.
+Proyek ini mengatasi masalah tersebut dengan memadukan kecerdasan buatan (AI) segmentasi piksel dengan antarmuka yang ramah pengguna. Cukup masukkan file gambar Anda (satu atau banyak sekaligus), dan AI akan mendeteksi objek utama, memisahkan latar belakang, serta menghasilkan berkas gambar **PNG transparan asli (RGBA)** beresolusi penuh secara instan.
 
-### Mengapa Memilih Proyek Ini?
-* **Akurasi Tinggi**: Menggunakan model segmentasi berbasis InSPyReNet yang mampu memisahkan objek halus seperti helai rambut atau bayangan dari latar belakang dengan sangat rapi.
-* **Batch Processing**: Mampu memproses puluhan hingga ratusan gambar sekaligus secara otomatis.
-* **Auto-Correction Rotasi**: Dilengkapi dengan penanganan *EXIF Transpose* dari pustaka Pillow untuk memastikan gambar yang diambil dari kamera ponsel tidak terbalik setelah diproses.
-* **Fleksibel & Cepat**: Mendukung akselerasi GPU Nvidia (CUDA) untuk pemrosesan super cepat (~2-3 detik per gambar) serta fallback otomatis ke CPU jika GPU tidak tersedia.
+---
 
-### Teknologi yang Digunakan
-* **Bahasa Pemrograman**: [Python 3.12](https://www.python.org/)
-* **Deep Learning Framework**: [PyTorch](https://pytorch.org/) & [Torchvision](https://pytorch.org/vision/stable/index.html)
-* **Core Background Remover**: [transparent-background](https://github.com/xuebinqin/DIS) (InSPyReNet base mode)
-* **Image Processing**: [Pillow (PIL)](https://python-pillow.org/) & [OpenCV](https://opencv.org/)
-* **Visualisasi**: [Matplotlib](https://matplotlib.org/) (untuk plotting perbandingan hasil)
-* **Progress Monitoring**: [tqdm](https://github.com/tqdm/tqdm) (progress bar interaktif)
+## 🌟 Fitur Utama
+
+* **Hapus Background Massal (Batch Processing)**: Unggah puluhan berkas gambar sekaligus, AI akan memprosesnya satu per satu dalam antrean otomatis.
+* **Output PNG Asli & Berkualitas**: Gambar disimpan secara eksplisit sebagai berkas `.png` berkualitas tinggi, mencegah konversi otomatis browser ke format `.webp`.
+* **Koreksi Rotasi Sensor (EXIF Transpose)**: Menggunakan modul Pillow untuk membaca metadata orientasi kamera ponsel. Gambar potret (*portrait*) atau lanskap (*landscape*) tidak akan terbalik saat diproses.
+* **Tampilan Galeri Hasil**: Hasil foto transparan disajikan dalam bentuk kisi galeri yang indah sehingga Anda dapat meninjau semua hasil secara visual sebelum mengunduh.
+* **Akselerasi Multi-Hardware**: Mendukung GPU Nvidia (CUDA) untuk performa inferensi super cepat (~1-2 detik per gambar) serta *fallback* otomatis ke CPU jika kartu grafis tidak tersedia.
+* **Siap Deploy 100% Gratis**: Dilengkapi berkas konfigurasi Gradio (`app.py` & `requirements.txt`) sehingga siap diunggah ke Hugging Face Spaces tanpa biaya bulanan apa pun.
 
 ---
 
 ## 🏗️ Arsitektur Proyek
 
-Aplikasi ini menggunakan desain pipa pemrosesan data (Data Pipeline) yang terstruktur dan modular. Alur data dari berkas gambar mentah hingga menjadi gambar transparan dapat digambarkan sebagai berikut:
+Aplikasi ini dirancang menggunakan arsitektur pipa pemrosesan data (*Data Pipeline*) yang modular. Data dialirkan secara aman melalui tahapan berikut:
 
 ### Diagram Arsitektur Sistem
 
 ```mermaid
 graph TD
-    A[Gambar Asli: .jpg, .jpeg, .png] --> B[Folder Input: images/]
-    B --> C[Muat Gambar & Baca Metadata EXIF]
-    C --> D{Koreksi Orientasi? <br> exif_transpose}
-    D -->|Ya| E[Rotasi Gambar Sesuai Orientasi Kamera]
-    D -->|Tidak| F[Gunakan Orientasi Default]
-    E --> G[Konversi Gambar ke Mode RGB]
-    F --> G
-    G --> H[Model InSPyReNet / transparent-background]
-    I[Deteksi Perangkat: CUDA / CPU] --> H
-    H --> J[Prediksi Segmentasi Masking / Matte]
+    subgraph Sumber Input Gambar
+        InA[Notebook: Folder images/]
+        InB[Website: Widget Batch Upload]
+    end
+
+    InA --> C[Iterasi & Antrean Gambar]
+    InB --> C
+
+    C --> D[Koreksi Orientasi EXIF]
+    D --> E[Konversi Gambar ke Mode RGB]
+    E --> F[Inisialisasi Model InSPyReNet]
+    
+    subgraph Engine AI (PyTorch)
+        F --> G{Deteksi Hardware?}
+        G -->|CUDA Aktif| H[Proses via GPU Nvidia]
+        G -->|CUDA Mati| I[Proses via CPU]
+    end
+
+    H --> J[Prediksi Segmentasi & Alpha Masking]
+    I --> J
+
     J --> K[Konversi Output ke Mode Transparansi RGBA]
-    K --> L[Simpan Output dalam format PNG]
-    L --> M[Folder Output: remove-bg/]
-    M --> N[Visualisasi Hasil Menggunakan Matplotlib]
+    K --> L[Simpan Eksplisit ke Format Berkas PNG]
+
+    subgraph Tujuan Hasil Output
+        OutA[Notebook: Folder remove-bg/]
+        OutB[Website: Daftar File Unduhan PNG & Kisi Galeri]
+    end
+
+    L --> OutA
+    L --> OutB
 ```
 
-### Spesifikasi Model
-Model default yang diinisialisasi oleh pustaka `transparent-background` adalah model **`base`** (InSPyReNet) yang dilatih secara khusus untuk mendeteksi subjek utama dalam sebuah gambar (seperti manusia, hewan, kendaraan, atau benda) dan memisahkannya dari latar belakang secara dinamis.
-
-* **Mode Pemrosesan**: `rgba` (Menghasilkan output berformat RGBA dengan channel transparansi).
-* **Perangkat**: Otomatis mendeteksi kartu grafis Nvidia dengan CUDA, atau menggunakan CPU sebagai alternatif.
+### Spesifikasi Model & Pipeline
+* **Model AI**: InSPyReNet (*Interesting Structure Tensor Product-based Representation Network*) base model.
+* **Pipeline Output**:
+  - Input: `.jpg`, `.jpeg`, `.png` (RGB mode)
+  - Intermediary: Tensor image segmenting & Alpha channel blending
+  - Output: `.png` (RGBA mode dengan channel transparansi penuh)
 
 ---
 
 ## 🔄 Workflow (Alur Kerja)
 
-Langkah-langkah terperinci yang dijalankan di dalam file [Remove_Background_Apps.ipynb](file:///d:/AL%20FITRA/GITHUB/Remove-Background-Apps/Remove_Background_Apps.ipynb) adalah:
+### A. Alur Kerja Notebook (Lokal/Colab)
+Proses dalam berkas [Remove_Background_Apps.ipynb](file:///d:/AL%20FITRA/GITHUB/Remove-Background-Apps/Remove_Background_Apps.ipynb):
+1. **Instalasi Paket**: Mengunduh pustaka utama `transparent-background` dan komponen pendukung.
+2. **Pengecekan CUDA**: Menampilkan jenis kartu grafis yang aktif.
+3. **Pembuatan Direktori**: Membuat folder input `images/` dan folder output `remove-bg/`.
+4. **Pemuatan Model**: Memuat file bobot model AI ke memori RAM/VRAM.
+5. **Pemrosesan Batch**: Melakukan iterasi berkas gambar di folder input, memperbaiki rotasi EXIF, memotong latar belakang, dan menyimpan hasilnya ke folder output.
+6. **Visualisasi**: Memplot hasil sebelum dan sesudah secara berdampingan menggunakan `matplotlib.pyplot`.
 
-1. **Instalasi Dependensi (`!pip install transparent-background`)**
-   Sistem mengunduh dan memasang paket utama beserta dependensi prasyaratnya (seperti `timm`, `kornia`, `albumentations`, `pymatting`, dll).
-2. **Impor Pustaka & Verifikasi GPU**
-   Memuat pustaka Python yang diperlukan dan menjalankan fungsi `torch.cuda.is_available()` untuk memastikan apakah komputasi akselerasi GPU aktif atau tidak.
-3. **Konfigurasi Folder Kerja**
-   Membuat folder input (`images`) dan output (`remove-bg`) secara otomatis di direktori kerja saat ini menggunakan modul `os.makedirs()`.
-4. **Inisialisasi Remover Model (`remover = Remover()`)**
-   Memuat arsitektur model dan mengunduh bobot (weight) model terlatih dari repositori server jika dijalankan pertama kali.
-5. **Pengunggahan Gambar (Upload)**
-   Pada Google Colab, widget unggah berkas digunakan untuk mengirim gambar secara interaktif dari mesin lokal pengguna langsung ke dalam folder `images`.
-6. **Eksekusi Pemrosesan Batch**
-   * Membaca seluruh file dalam direktori `images` yang berakhiran ekstensi `.jpg`, `.jpeg`, atau `.png`.
-   * Melakukan rotasi otomatis berdasar sensor orientasi kamera (`ImageOps.exif_transpose`).
-   * Melakukan inferensi segmentasi background via `remover.process(img, type='rgba')`.
-   * Menyimpan hasilnya ke folder `remove-bg` dengan nama `{nama_file_asli}_transparent.png`.
-7. **Pencatatan File Hasil**
-   Mencetak daftar file yang telah berhasil diproses di direktori output untuk keperluan verifikasi.
-8. **Visualisasi Komparatif**
-   Menggunakan `matplotlib.pyplot` untuk memplot dan menampilkan gambar asli secara berdampingan dengan gambar hasil penghapusan background, memberikan visualisasi instan kepada pengguna.
+### B. Alur Kerja Web UI (Gradio)
+Proses dalam berkas [app.py](file:///d:/AL%20FITRA/GITHUB/Remove-Background-Apps/app.py):
+1. **Upload**: Pengguna mengunggah satu atau beberapa berkas gambar secara bersamaan di antarmuka web.
+2. **Batch Processing**: Gambar dikirim sebagai daftar berkas (*list of files*). Script Python membaca letak penyimpanan sementara gambar tersebut di sistem.
+3. **AI Inference & PNG Saving**: Objek utama diisolasi, lalu berkas disimpan secara fisik dalam format PNG di dalam folder sementara (*temporary directory*) server.
+4. **Output Rendering**: Website menyajikan tautan unduhan masing-masing berkas PNG asli serta memuat gambar ke dalam galeri preview visual.
 
 ---
 
 ## 📁 Struktur Direktori
 
-Berikut adalah struktur dari proyek ini:
+Berikut adalah susunan folder dan file pada repositori proyek ini:
 
 ```text
 Remove-Background-Apps/
-├── .git/                          # Folder konfigurasi Git
-├── images/                        # Folder tempat menaruh gambar input (Original)
+├── .git/                          # Folder konfigurasi repositori Git
+├── images/                        # Folder gambar asli input (Notebook)
 │   ├── Dhani PDH.JPG
 │   ├── Meme PDH.JPG
 │   └── Riko PDH.JPG
-├── remove-bg/                     # Folder tempat menyimpan hasil gambar (Transparent)
+├── remove-bg/                     # Folder hasil gambar transparan (Notebook)
 │   ├── Dhani PDH_transparent.png
 │   ├── Meme PDH_transparent.png
 │   └── Riko PDH_transparent.png
+├── app.py                         # Kode antarmuka website (Gradio Web App)
+├── requirements.txt               # Daftar pustaka wajib untuk web deployment
 ├── README.md                      # Dokumentasi lengkap proyek (File ini)
-└── Remove_Background_Apps.ipynb   # Main Jupyter Notebook proyek
+└── Remove_Background_Apps.ipynb   # File Jupyter Notebook utama proyek
 ```
 
 ---
 
 ## 🚀 Instalasi & Penggunaan
 
-### A. Berjalan di Google Colab (Rekomendasi / Mudah)
-Cara termudah untuk mencoba proyek ini tanpa melakukan instalasi lokal adalah melalui Google Colab:
-1. Klik badge **Open In Colab** di bagian atas halaman ini.
-2. Jalankan cell langkah demi langkah (tekan tombol `Shift + Enter` atau tombol play pada setiap cell).
-3. Saat sampai pada cell **Upload Images**, pilih gambar dari komputer Anda.
-4. Tunggu hingga proses segmentasi selesai, lalu periksa folder `remove-bg` pada menu file manager sebelah kiri Colab untuk mengunduh hasil gambar PNG transparan Anda.
+### A. Berjalan di Google Colab (Mudah & Cepat)
+Anda dapat menjalankan proyek ini tanpa perlu menginstal apa pun di komputer Anda menggunakan server GPU Google gratis:
+1. Klik tombol **Open In Colab** di bagian paling atas halaman ini.
+2. Jalankan cell satu per satu secara berurutan dengan menekan `Shift + Enter`.
+3. Pada langkah pengunggahan file, unggah foto-foto Anda.
+4. Hasil pemrosesan dapat langsung diunduh dari folder `remove-bg` di sidebar file manager sebelah kiri Colab.
 
-### B. Berjalan di Komputer Lokal (Local Setup)
+---
 
-Jika Anda ingin menjalankan aplikasi ini di komputer lokal (Windows/Linux/macOS), ikuti petunjuk berikut:
+### B. Berjalan secara Lokal (Python CLI / Notebook)
 
 #### 1. Prasyarat Sistem
-* **Python**: Python versi 3.8 s.d. 3.12 terinstal di sistem Anda.
-* **GPU Nvidia & CUDA Toolkit** (Opsional, agar pemrosesan gambar berjalan sangat cepat).
-* **Git** (untuk menduplikasi repositori).
+* **Python**: Versi 3.8 hingga 3.12 terinstal di komputer Anda.
+* **GPU Nvidia & CUDA Toolkit** (Sangat disarankan untuk kecepatan ekstra, tetapi opsional).
+* **Git** (Untuk menduplikasi repositori).
 
 #### 2. Langkah Setup
 1. **Clone Repositori**:
@@ -159,100 +176,92 @@ Jika Anda ingin menjalankan aplikasi ini di komputer lokal (Windows/Linux/macOS)
    cd Remove-Background-Apps
    ```
 
-2. **Buat Virtual Environment** (Sangat disarankan agar dependensi tidak bentrok dengan library global):
-   * Di Windows:
+2. **Buat Virtual Environment**:
+   * Windows:
      ```bash
      python -m venv venv
      venv\Scripts\activate
      ```
-   * Di Linux/macOS:
+   * Linux/macOS:
      ```bash
      python3 -m venv venv
      source venv/bin/activate
      ```
 
-3. **Instal Dependensi**:
-   Instal PyTorch terlebih dahulu sesuai dengan konfigurasi hardware Anda (silakan merujuk ke situs resmi [PyTorch](https://pytorch.org/) untuk perintah instalasi CUDA yang sesuai). 
-   Contoh instalasi standar (CPU/GPU default):
+3. **Instal Pustaka Pendukung**:
+   Pasang PyTorch terlebih dahulu sesuai instruksi web resmi [PyTorch](https://pytorch.org/). Contoh instalasi standard:
    ```bash
    pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
-   pip install transparent-background pillow tqdm matplotlib opencv-python notebook
+   pip install transparent-background pillow tqdm matplotlib opencv-python notebook gradio
    ```
 
-#### 3. Menjalankan Kode
-Anda dapat membuka notebook melalui Jupyter Notebook:
-```bash
-jupyter notebook
-```
-Buka file `Remove_Background_Apps.ipynb`, masukkan gambar yang ingin Anda hilangkan background-nya ke dalam direktori `images`, lalu jalankan seluruh cell di notebook tersebut.
-
-Sebagai alternatif, Anda juga dapat menulis script Python mandiri (`main.py`) dengan logika yang sama:
-```python
-import os
-import torch
-from PIL import Image, ImageOps
-from tqdm import tqdm
-from transparent_background import Remover
-
-# Konfigurasi folder
-INPUT_DIR = "images"
-OUTPUT_DIR = "remove-bg"
-os.makedirs(INPUT_DIR, exist_ok=True)
-os.makedirs(OUTPUT_DIR, exist_ok=True)
-
-# Inisialisasi model
-print("CUDA tersedia:", torch.cuda.is_available())
-remover = Remover()
-
-# Ambil list file
-image_files = [f for f in os.listdir(INPUT_DIR) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
-
-for filename in tqdm(image_files):
-    input_path = os.path.join(INPUT_DIR, filename)
-    output_path = os.path.join(OUTPUT_DIR, f"{os.path.splitext(filename)[0]}_transparent.png")
-    
-    img = Image.open(input_path)
-    img = ImageOps.exif_transpose(img) # Mengatasi rotasi otomatis kamera
-    img = img.convert("RGB")
-    
-    result = remover.process(img, type='rgba')
-    result.save(output_path)
-
-print("Proses penghapusan latar belakang selesai!")
-```
-Jalankan menggunakan:
+#### 3. Eksekusi Script CLI
+Anda juga dapat membuat file script mandiri (misal: `main.py`) menggunakan logika Python CLI untuk memproses gambar lokal di folder `images/`:
 ```bash
 python main.py
 ```
 
 ---
 
+### C. Menjalankan Website Secara Lokal (Gradio Web UI)
+
+Jika Anda ingin menjalankan aplikasi web interaktif di browser komputer Anda sendiri secara lokal:
+
+1. Pastikan dependensi pada langkah sebelumnya sudah terinstal.
+2. Jalankan berkas [app.py](file:///d:/AL%20FITRA/GITHUB/Remove-Background-Apps/app.py):
+   ```bash
+   python app.py
+   ```
+3. Buka browser Anda dan masuk ke alamat:
+   👉 **`http://localhost:7860`**
+4. Silakan gunakan antarmuka web untuk mengunggah gambar dan mengunduh hasilnya secara langsung.
+
+---
+
+### D. Mendeploy Website ke Cloud Secara Gratis (Hugging Face Spaces)
+
+Anda dapat mempublikasikan aplikasi ini ke internet secara gratis menggunakan **Hugging Face Spaces**:
+
+1. Buat akun di [Hugging Face](https://huggingface.co/).
+2. Buat Space baru: Klik foto profil Anda di kanan atas -> pilih **New Space**.
+3. Isi parameter pembuatan Space:
+   * **Space name**: `remove-background-app` (atau nama lain)
+   * **SDK**: Pilih **Gradio**
+   * **Gradio Template**: Pilih **Blank**
+   * **Space hardware**: Pilih **CPU Basic (Free - RAM 16GB)**
+   * **Visibility**: Pilih **Public**
+4. Klik tombol **Create Space**.
+5. Pada halaman utama Space Anda, klik tab **Files** -> pilih **Add file** -> **Upload files**.
+6. Unggah berkas [app.py](file:///d:/AL%20FITRA/GITHUB/Remove-Background-Apps/app.py) dan [requirements.txt](file:///d:/AL%20FITRA/GITHUB/Remove-Background-Apps/requirements.txt) dari folder proyek lokal Anda.
+7. Gulir ke bawah halaman dan klik tombol hijau **Commit changes to main**.
+8. Server Hugging Face akan membangun (*build*) aplikasi Anda secara otomatis. Dalam 1-2 menit, status akan berubah menjadi **`Running`** (hijau) dan website Anda siap diakses oleh publik secara online!
+
+---
+
 ## 📸 Contoh Perbandingan (Sebelum & Sesudah)
 
-Model segmentasi ini membagi setiap piksel gambar menjadi bagian objek utama dan latar belakang. Berikut adalah representasi hasil pemrosesan:
-
-| Gambar Asli (Original) | Hasil Tanpa Background (Transparent PNG) |
+| Gambar Asli (Sebelum) | Gambar Transparan PNG (Sesudah) |
 | :---: | :---: |
-| Dilengkapi latar belakang bertekstur, warna bervariasi, outdoor/indoor | Objek utama terpotong sempurna dengan tepian halus (Anti-Aliasing) dan format latar transparan |
+| Objek utama dengan latar belakang bervariasi (ruangan, luar ruangan, dll.) | Objek terpotong rapi dengan latar belakang transparan sempurna (RGBA). |
 
 ---
 
 ## 👤 Developer Profile
 
-Proyek ini dikembangkan dan dipelihara oleh:
+Proyek ini dikembangkan dan dirawat dengan penuh dedikasi oleh:
 
 * **Nama Lengkap**: Al Fitra Nur Ramadhani
 * **Email**: [alfitranurr@gmail.com](mailto:alfitranurr@gmail.com)
 * **GitHub**: [@alfitranurr](https://github.com/alfitranurr)
-* **Repository Proyek**: [Remove-Background-Apps](https://github.com/alfitranurr/Remove-Background-Apps)
+* **Repositori Proyek**: [Remove-Background-Apps](https://github.com/alfitranurr/Remove-Background-Apps)
 
-Jika Anda memiliki pertanyaan, saran perbaikan, atau ingin berkontribusi dalam pengembangan aplikasi ini, silakan ajukan *Issue* atau buat *Pull Request* langsung di halaman repositori GitHub.
+Jika Anda menyukai proyek ini, berikan kontribusi Anda dengan mengirimkan *Pull Request* atau ajukan saran di halaman repositori GitHub!
 
 ---
 
 ## 📄 Lisensi
 
-Proyek ini dilisensikan di bawah **Lisensi MIT** - lihat file [LICENSE](LICENSE) untuk detail lebih lanjut. (Catatan: Pustaka `transparent-background` dan model pra-latih yang diunduh tunduk pada lisensi masing-masing kreator aslinya).
+Proyek ini dilisensikan di bawah **Lisensi MIT** - lihat file [LICENSE](LICENSE) untuk informasi lebih lanjut. (Catatan: Model segmentasi dan pustaka `transparent-background` tunduk pada lisensi pencipta aslinya).
 
 ---
-*Dibuat dengan 💻 dan ☕ oleh Al Fitra Nur Ramadhani.*
+*Dibuat dengan penuh 💻 dan ☕ oleh Al Fitra Nur Ramadhani.*
