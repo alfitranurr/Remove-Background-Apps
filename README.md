@@ -66,7 +66,7 @@ Aplikasi ini dirancang menggunakan arsitektur pipa pemrosesan data (*Data Pipeli
 
 ```mermaid
 graph TD
-    subgraph Sumber Input Gambar
+    subgraph "Sumber Input Gambar"
         InA[Notebook: Folder images/]
         InB[Website: Widget Batch Upload]
     end
@@ -78,7 +78,7 @@ graph TD
     D --> E[Konversi Gambar ke Mode RGB]
     E --> F[Inisialisasi Model InSPyReNet]
     
-    subgraph Engine AI (PyTorch)
+    subgraph "Engine AI (PyTorch)"
         F --> G{Deteksi Hardware?}
         G -->|CUDA Aktif| H[Proses via GPU Nvidia]
         G -->|CUDA Mati| I[Proses via CPU]
@@ -90,7 +90,7 @@ graph TD
     J --> K[Konversi Output ke Mode Transparansi RGBA]
     K --> L[Simpan Eksplisit ke Format Berkas PNG]
 
-    subgraph Tujuan Hasil Output
+    subgraph "Tujuan Hasil Output"
         OutA[Notebook: Folder remove-bg/]
         OutB[Website: Daftar File Unduhan PNG & Kisi Galeri]
     end
